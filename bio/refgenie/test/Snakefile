@@ -1,11 +1,29 @@
 rule obtain_asset:
     output:
-        # the name refers to the refgenie seek key (see attributes on http://refgenomes.databio.org)
-        fai="refs/genome.fasta"
+        # Each name is a refgenie seek key of the asset (see `refgenie list`).
         # Multiple outputs/seek keys are possible here.
+        fasta="refs/genome.fa",
+        fai="refs/genome.fa.fai",
+        chrom_sizes="refs/genome.chrom.sizes",
+    log:
+        "logs/refgenie/obtain_asset.log",
     params:
-        genome="human_alu",
+        genome="rCRSd",
         asset="fasta",
-        tag="default"
+    wrapper:
+        "master/bio/refgenie"
+
+
+rule obtain_index:
+    output:
+        # Index seek keys give a directory of index files named after the genome,
+        # here refs/bwa_index/rCRSd.{amb,ann,bwt,pac,sa}.
+        bwa_index=directory("refs/bwa_index"),
+    log:
+        "logs/refgenie/obtain_index.log",
+    params:
+        genome="rCRSd",
+        asset="bwa_index",
+        tag="0.7.19",  # optional, the asset name within the group
     wrapper:
         "master/bio/refgenie"

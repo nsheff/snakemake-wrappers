@@ -3,5 +3,4 @@ channels:
   - bioconda
   - nodefaults
 dependencies:
-  - refgenie =0.13.0
-  - refgenconf =0.13.1
+  - refgenie =1.0

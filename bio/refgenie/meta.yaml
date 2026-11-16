@@ -1,7 +1,28 @@
 name: refgenie
 description: Deploy biomedical reference datasets via refgenie.
-url: https://refgenie.databio.org/en/latest/
+url: https://docs.refgenie.org/refgenie/
 authors:
   - Johannes Köster
+  - Nathan Sheffield
 output:
-  - Multiple outputs/seek keys (see attributes on http://refgenomes.databio.org)
+  - >
+    One or more named outputs. Each name is a seek key of the asset, for example
+    ``fasta``, ``fai`` or ``chrom_sizes`` for a ``fasta`` asset (``refgenie list``
+    shows the seek keys). A file seek key becomes a symlink to that file. A directory
+    or prefix seek key, such as an aligner index, becomes a new directory of symlinks
+    to the asset's files; declare it with ``directory()``.
+params:
+  - genome: Genome alias, for example ``hg38``.
+  - asset: Asset group, for example ``fasta`` or ``bwa_index``.
+  - tag: >
+      Name of the asset within its group, for example ``default`` or ``0.7.19``
+      (optional; by default, the group's default asset).
+notes: |
+  Requires refgenie 1.x. The params follow the refgenie registry path
+  ``genome/asset.seek_key:tag``. If the asset is not present locally, it is pulled
+  from the subscribed refgenie servers (by default https://api.refgenie.org).
+  Refgenie keeps its database and files in ``$REFGENIE_HOME_PATH`` (default
+  ``~/.refgenie``) and sets it up on first use. Set ``$REFGENIE_HOME_PATH`` or
+  ``$REFGENIE_DB_CONFIG_PATH`` to use another location, and run
+  ``refgenie subscribe -s <url>`` once to use another server. The ``$REFGENIE``
+  config file of refgenie 0.x is no longer read.

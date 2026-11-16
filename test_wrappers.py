@@ -4224,14 +4224,10 @@ def test_porechop_abi(run):
     )
 
 
-def test_refgenie(run):
-    try:
-        shutil.copytree("bio/refgenie/test/genome_folder", "/tmp/genome_folder")
-    except FileExistsError:
-        # no worries, the directory is already there
-        pass
-    os.environ["REFGENIE"] = "/tmp/genome_folder/genome_config.yaml"
-    run("bio/refgenie", ["snakemake"])
+def test_refgenie(run, tmp_path, monkeypatch):
+    # refgenie sets up a fresh home here on first use
+    monkeypatch.setenv("REFGENIE_HOME_PATH", str(tmp_path))
+    run("bio/refgenie", ["snakemake", "refs/genome.fa", "refs/bwa_index"])
 
 
 def test_hmmer_hmmbuild(run):
